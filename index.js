@@ -83,7 +83,7 @@ const credsPath = path.join(sessionDir, 'creds.json');
 if (!fs.existsSync(sessionDir)) {
     fs.mkdirSync(sessionDir, { recursive: true });
 }
-
+/*
 const SESSIONS_BASE_URL = 'https://subzero-md.koyeb.app'; // Your Backend URL
 const SESSIONS_API_KEY = 'subzero-md'; // Your API Key
 
@@ -124,7 +124,20 @@ async function loadSession() {
         return null;
     }
 }
-
+*/
+const sessdata = config.SESSION_ID.split("SUBZERO-MD~")[1];
+    const url = `https://pastebin.com/raw/${sessdata}`;
+    try {
+        const response = await axios.get(url);
+        const data = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
+        await fs.promises.writeFile(credsPath, data);
+        console.log("🔒 Session Successfully Loaded !!");
+        return true;
+    } catch (error) {
+       // console.error('Failed to download session data:', error);
+        return false;
+    }
+}
 //=============================================
 
 
